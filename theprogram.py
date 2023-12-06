@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import csv
+
+
 # Defines a character class. Each character that is created will be part of this class, with each part of the character sheet as a variable
 class Character:
     name = ""
@@ -27,6 +30,16 @@ class Character:
 
     # Universal variable to aid in calculating skill stats based on ability scores
     abilitycalculation = {'Strength': ['Strength', 'Athletics'], 'Dexterity': ['Dexterity', 'Acrobatics', 'Slight of hand', 'Stealth'], 'Constitution': ['Constitution'], 'Intelligence': ['Intelligence', 'Arcana', 'History', 'Investigation', 'Nature', 'Religion'], 'Wisdom': ['Wisdom', 'Animal handling', 'Insight', 'Medicine', 'Perception', 'Survival'], 'Charisma': ['Charisma', 'Deception', 'Intimidation', 'Performance', 'Persuasion']}
+
+    # Class function to export a character sheet once character building has been completed.
+    def export(self):
+        csvout = {"Name": self.name, "Path Name": self.pathname, "Level": self.level, "Class": self.setclass, "Background": self.background,
+                  "Ability scores": self.scores, "Stats": self.stats}
+        fields = list(csvout.keys())
+        with open("charactersheet_" + self.pathname + ".csv", "w", newline="") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=fields)
+            writer.writeheader()
+            writer.writerow(csvout)
 
 
 # This is a formatting function to add a dynamic border to passed text. The buffer variable can add whitespace characters between the edge of the screen and the boarder, and may be left empty
