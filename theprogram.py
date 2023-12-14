@@ -12,6 +12,8 @@ class Character:
     background = ""
     # Variable for a path-friendly version of the character name
     pathname = "_".join(name.split())
+    # Variable for selected ability score proficiencies
+    proficiencies = []
     
     # Variable for raw ability scores
     scores = {"Strength": 0, "Dexterity": 0, "Constitution": 0, "Intelligence": 0, "Wisdom": 0, "Charisma": 0}
@@ -24,6 +26,10 @@ class Character:
     
     # Universal variable to determine skill and saving throw buffs based on class
     classbuffs = {'Barbarian': {'throws': ['Strength', 'Constitution'], 'howmany': 2, 'skills': ['Animal handling', 'Athletics', 'Intimidation', 'Nature', 'Perception', 'Survival']}, 'Bard': {'throws': ['Dexterity', 'Charisma'], 'howmany': 3, 'skills': ["Strength", "Athletics", "Dexterity", "Acrobatics", "Sleight of hand", "Stealth", "Intelligence", "Arcana", "History", "Investigation", "Nature", "Religion", "Wisdom", "Animal handling", "Insight", "Medicine", "Perception", "Survival", "Charisma", "Deception", "Intimidation", "Performance", "Persuasion"]}, 'Cleric': {'throws': ['Wisdom', 'Charisma'], 'howmany': 2, 'skills': ['History', 'Insight', 'Medicine', 'Persuasion', 'Religion']}, 'Druid': {'throws': ['Intelligence', 'Wisdom'], 'howmany': 2, 'skills': ['Arcana', 'Animal handling', 'Insight', 'Medicine', 'Nature', 'Perception', 'Religion', 'Survival']}, 'Fighter': {'throws': ['Strength', 'Constitution'], 'howmany': 2, 'skills': ['Acrobatics', 'Animal handling', 'Athletics', 'History', 'Insight', 'Intimidation', 'Perception', 'Survival']}, 'Monk': {'throws': ['Strength', 'Dexterity'], 'howmany': 2, 'skills': ['Acrobatics', 'Athletics', 'History', 'Insight', 'Religion', 'Stealth']}, 'Paladin': {'throws': ['Wisdom', 'Charisma'], 'howmany': 2, 'skills': ['Athletics', 'Insight', 'Intimidation', 'Medicine', 'Persuasion', 'Religion']}, 'Ranger': {'throws': ['Strength', 'Dexterity'], 'howmany': 3, 'skills': ['Animal handling', 'Athletics', 'Insight', 'Investigation', 'Nature', 'Perception', 'Stealth', 'Survival']}, 'Rogue': {'throws': ['Dexterity', 'Intelligence'], 'howmany': 4, 'skills': ['Acrobatics', 'Athletics', 'Deception', 'Insight', 'Intimidation', 'Investigation', 'Perception', 'Performance', 'Persuasion', 'Sleight of hand', 'Stealth']}, 'Sorcerer': {'throws': ['Constitution', 'Charisma'], 'howmany': 2, 'skills': ['Arcana', 'Deception', 'Insight', 'Intimidation', 'Persuasion', 'Religion']}, 'Warlock': {'throws': ['Wisdom', 'Charisma'], 'howmany': 2, 'skills': ['Arcana', 'Deception', 'History', 'Intimidation', 'Investigation', 'Nature', 'Religion']}, 'Wizard': {'throws': ['Intelligence', 'Wisdom'], 'howmany': 2, 'skills': ['Arcana', 'History', 'Insight', 'Investigation', 'Medicine', 'Religion']}}
+
+    # Universal variable for level events based on class
+    classevents = {'Bard': ['3', '10'], 'Cleric': ['1'], 'Fighter': ['6', '14'], 'Rogue': ['1', '6', '10', '15']}
+
     
     # Universal variable to determine skill buffs based on background
     backgroundbuffs = {'Acolyte': ['Insight', 'Religion'], 'Charlatan': ['Deception', 'Sleight of hand'], 'Criminal': ['Deception', 'Stealth'], 'Spy': ['Deception', 'Stealth'], 'Entertainer': ['Acrobatics', 'Performance'], 'Gladiator': ['Acrobatics', 'Performance'], 'Folk hero': ['Animal handling', 'Survival'], 'Guild artisan': ['Insight', 'Persuasion'], 'Guild Merchant': ['Insight', 'Persuasion'], 'Hermit': ['Medicine', 'Religion'], 'Noble': ['History', 'Persuasion'], 'Knight': ['History', 'Persuasion'], 'Outlander': ['Athletics', 'Survival'], 'Sage': ['Arcana', 'History'], 'Sailor': ['Athletics', 'Perception'], 'Pirate': ['Athletics', 'Perception'], 'Soldier': ['Athletics', 'Intimidation'], 'Urchin': ['Sleight of hand', 'Stealth']}
@@ -33,8 +39,7 @@ class Character:
 
     # Class function to export a character sheet once character building has been completed.
     def export(self):
-        csvout = {"Name": self.name, "Path Name": self.pathname, "Level": self.level, "Class": self.setclass, "Background": self.background,
-                  "Ability scores": self.scores, "Stats": self.stats}
+        csvout = {"Name": self.name, "Path Name": self.pathname, "Level": self.level, "Class": self.setclass, "Background": self.background, "Ability scores": self.scores, "Stats": self.stats, "Proficiencies": self.proficiencies}
         fields = list(csvout.keys())
         with open("charactersheet_" + self.pathname + ".csv", "w", newline="") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fields)
