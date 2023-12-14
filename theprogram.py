@@ -59,6 +59,14 @@ def bordered(text, buffer=""):
         res.append(buffer + '│' + (s + ' ' * width)[:width] + '│')
     res.append(buffer + '└' + '─' * width + '┘')
     return '\n'.join(res)
+        
+
+#This is a formatting function for taking a list of strings and returning a formatted list with each option given a number value. This will be useful for building selection menus.
+def numbered(items):
+    outputlist = []
+    for index, item in enumerate(items):
+        outputlist.append("({}): {}".format(index+1, item))
+    return outputlist
 
 
 # This is a formatting function for formatting a list of strings into columns. If the printiterations value is left blank, the columned information will be printed. If False is passed, the formatted list of strings will be returned to be saved as a variable. This variable can then be passed through again for a column of 4 & so on
@@ -67,8 +75,8 @@ def columns(itemlist, printiterations=True):
     returnlist = []
     for item in items:
         if printiterations:
-            print('{:<60}{}'.format(item, next(items, "")))
+            print('{:<30}{:<30}'.format(item, next(items, "")))
         else:
-            returnlist.append('{:<60}{}'.format(item, next(items, "")))
+            returnlist.append('{:<30}{:<30}'.format(item, next(items, "")))
     if not printiterations:
         return returnlist
