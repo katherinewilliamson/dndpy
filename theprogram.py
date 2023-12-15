@@ -40,8 +40,48 @@ class Character:
     backgroundbuffs = {'Acolyte': ['Insight', 'Religion'], 'Charlatan': ['Deception', 'Sleight of hand'], 'Criminal': ['Deception', 'Stealth'], 'Spy': ['Deception', 'Stealth'], 'Entertainer': ['Acrobatics', 'Performance'], 'Gladiator': ['Acrobatics', 'Performance'], 'Folk hero': ['Animal handling', 'Survival'], 'Guild artisan': ['Insight', 'Persuasion'], 'Guild Merchant': ['Insight', 'Persuasion'], 'Hermit': ['Medicine', 'Religion'], 'Noble': ['History', 'Persuasion'], 'Knight': ['History', 'Persuasion'], 'Outlander': ['Athletics', 'Survival'], 'Sage': ['Arcana', 'History'], 'Sailor': ['Athletics', 'Perception'], 'Pirate': ['Athletics', 'Perception'], 'Soldier': ['Athletics', 'Intimidation'], 'Urchin': ['Sleight of hand', 'Stealth']}
 
     # Universal variable to aid in calculating skill stats based on ability scores
-    abilitycalculation = {'Strength': ['Strength', 'Athletics'], 'Dexterity': ['Dexterity', 'Acrobatics', 'Slight of hand', 'Stealth'], 'Constitution': ['Constitution'], 'Intelligence': ['Intelligence', 'Arcana', 'History', 'Investigation', 'Nature', 'Religion'], 'Wisdom': ['Wisdom', 'Animal handling', 'Insight', 'Medicine', 'Perception', 'Survival'], 'Charisma': ['Charisma', 'Deception', 'Intimidation', 'Performance', 'Persuasion']}
+    abilitycalculation = {'Strength': ['Strength', 'Athletics'], 'Dexterity': ['Dexterity', 'Acrobatics', 'Sleight of hand', 'Stealth'], 'Constitution': ['Constitution'], 'Intelligence': ['Intelligence', 'Arcana', 'History', 'Investigation', 'Nature', 'Religion'], 'Wisdom': ['Wisdom', 'Animal handling', 'Insight', 'Medicine', 'Perception', 'Survival'], 'Charisma': ['Charisma', 'Deception', 'Intimidation', 'Performance', 'Persuasion']}
 
+    # Class function to set up new character.
+    def setup(self):
+        while True:
+            try:
+                level = int(input("Character level:\n"))
+                if level < 0:
+                    raise ValueError
+                self.level = level
+                break
+            except ValueError:
+                print("Invalid selection, try again.")
+        racelist = list(self.racebuffs.keys())
+        formattedraces = columns(numbered(racelist), False)
+        columns(formattedraces)
+        while True:
+            try:
+                selection = int(input("Select character race:\n"))
+                if selection < 1 or selection > len(racelist):
+                    raise ValueError
+                self.race = racelist[selection-1]
+                break
+            except ValueError:
+                print("Invalid selection, try again.")
+        classlist = list(self.classbuffs.keys())
+        formattedclass = columns(numbered(classlist), False)
+        columns(formattedclass)
+        while True:
+            try:
+                selection = int(input("Character class: \n"))
+                if selection < 1 or selection > len(classlist):
+                    raise ValueError
+                self.setclass = classlist[selection-1]
+                break
+            except ValueError:
+                print("Invalid selection, try again.")
+        backgroundlist = list(self.backgroundbuffs.keys())
+        formattedbackground = 
+
+
+    
     # Class function to handle character class special level events
     def classevent(self, level):
         cl = self.setclass
@@ -208,7 +248,7 @@ class Character:
                         print("Ability scores cannot exceed 20, please select a different score.")
         if cl == "Rogue":
             if level == 1:
-                print("Choose a class option:\n(1): Thieves tools proficiency +1        (2): Double two skill proficiencies")
+                print("Choose a class option:\n(1): Thieves tools proficiency +1        (2): Gan expertise in two proficiencies")
                 while True:
                     try:
                         choice = int(input("\n"))
@@ -219,7 +259,7 @@ class Character:
                         print("Invalid selection, try again.")
                 if choice == 2:
                     chosen = []
-                    for x in range (1, 3):
+                    for x in range(1, 3):
                         columns(numbered(self.proficiencies["proficiencies"]))
                         while True:
                             try:
@@ -279,10 +319,8 @@ class Character:
                             print("Ability scores cannot exceed 20, please select a different score.")
             if level == 15:
                 self.proficiencies["proficiencies"].append("Wisdom")
+                
 
-
-
-    
     # Class function to recalculate character sheet after a skill score or proficiency has changed
     def recalculate(self):
         for score in list(self.abilitycalculation.keys()):
