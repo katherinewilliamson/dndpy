@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
 import csv
+import math
 
-
+# Defines a custom error that can be raised to give more information on why a user input failed
+class CustomExcept(Exception):
+    pass
+    
 # Defines a character class. Each character that is created will be part of this class, with each part of the character sheet as a variable
 class Character:
     name = ""
@@ -13,7 +17,7 @@ class Character:
     # Variable for a path-friendly version of the character name
     pathname = "_".join(name.split())
     # Variable for selected ability score proficiencies
-    proficiencies = []
+    proficiencies = {"proficiencies": [], "doubled": []}
     
     # Variable for raw ability scores
     scores = {"Strength": 0, "Dexterity": 0, "Constitution": 0, "Intelligence": 0, "Wisdom": 0, "Charisma": 0}
@@ -37,6 +41,187 @@ class Character:
     # Universal variable to aid in calculating skill stats based on ability scores
     abilitycalculation = {'Strength': ['Strength', 'Athletics'], 'Dexterity': ['Dexterity', 'Acrobatics', 'Slight of hand', 'Stealth'], 'Constitution': ['Constitution'], 'Intelligence': ['Intelligence', 'Arcana', 'History', 'Investigation', 'Nature', 'Religion'], 'Wisdom': ['Wisdom', 'Animal handling', 'Insight', 'Medicine', 'Perception', 'Survival'], 'Charisma': ['Charisma', 'Deception', 'Intimidation', 'Performance', 'Persuasion']}
 
+ # Class function to handle character class special level events
+    def classevent(self, level):
+        cl = self.setclass
+        if cl == "Bard":
+            if level==3:
+                # Character can choose their bard college. If they choose the college of lore, they gain 3 proficiencies
+                print("Choose your college:\n(1): College of Lore    (2): College of Valor")
+                while True:
+                    try:
+                        chosencollege = int(input())
+                        if chosencollege != 1 and chosencollege != 2:
+                            raise ValueError
+                        break
+                    except ValueError:
+                        print("Invalid selection, try again.")
+                if chosencollege == 1:
+                    chosenprofs = []
+                    options = []
+                    for item in list(self.stats.keys())[5:]:
+                        if item in self.proficiencies["proficiencies"]:
+                            continue
+                        else:
+                            options.append(item)
+                    optionsformat = columns(numbered(options), False)
+                    columns(optionsformat)
+                    for x in range(1,4):
+                        while True:
+                            try:
+                                chosenprof = int(input("Choose 3 proficiencies.    {}\n".format(chosenprofs)))
+                                if options[chosenprof-1] in chosenprofs or options[chosenprof-1] in self.proficiencies["proficiencies"]:
+                                    raise CustomExcept
+                                elif chosenprof < 1 or chosenprof > len(options):
+                                    raise ValueError
+                                else:
+                                    chosenprofs.append(options[chosenprof-1])
+                                    break
+                            except CustomExcept:
+                                print("Please select each proficiency only once.")
+                            except ValueError:
+                                print("Invalid selection, try again.")
+                    for item in chosenprofs:
+                        self.proficiencies["proficiencies"].append(item)
+                chosenexpertise = []
+                # Level 3 Bards also choose 2 proficiencies to gain expertise in.
+                for x in range(1,3):
+                    profoptions = self.proficiencies["proficiencies"]
+                    for item in numbered(profoptions):
+                        print(item)
+                    while True:
+                        try:
+                            chosen = int(input("Choose your expertise.    {}\n".format(chosenexpertise)))
+                            if chosen < 1 or chosen > len(profoptions):
+                                raise ValueError
+                            pickedname = profoptions[chosen-1]
+                            if pickedname in chosenexpertise or pickedname in self.proficiencies["doubled"]:
+                                raise CustomExcept
+                            self.proficiencies["doubled"].append(pickedname)
+                            chosenexpertise.append(pickedname)
+                            break
+                        except ValueError:
+                            print("Invalid selection, try again.")
+                        except CustomExcept:
+                            print("You're already an expert, please select another option.")
+            # At level 10, bards gain expertise in two more proficiencies
+            if level == 10:                       
+                chosenexpertise = []
+                for x in range(1,3):
+                    profoptions = []
+                    for item in self.proficiencies["proficiencies"]:
+                        if item in self.proficiencies["doubled"]:
+                            continue
+                        else:
+                            profoptions.append(item)                    
+                    for item in numbered(profoptions):
+                        print(item)
+                    while True:
+                        try:
+                            chosen = int(input("Choose your expertise.    {}\n".format(chosenexpertise)))
+                            if chosen < 1 or chosen > len(profoptions):
+                                raise ValueError
+                            pickedname = profoptions[chosen-1]
+                            if pickedname in chosenexpertise or pickedname in self.proficiencies["doubled"]:
+                                raise CustomExcept
+                            self.proficiencies["doubled"].append(pickedname)
+                            chosenexpertise.append(pickedname)
+                            break
+                        except ValueError:
+                            print("Invalid selection, try again.")
+                        except CustomExcept:
+                            print("You're already an expert, please select another option.")
+        if cl == "Cleric" and level == 1:
+            # At level 1, Clerics join a domain. Depending on thier domain, they may gain 
+            domains = ["Knowledge", "Life", "Light", "Nature", "Temptest", "Trickery", "War"]
+            print("Choose a divine domain:")
+            columns(numbered(domains))
+            while True:
+                try:
+                    selection = int(input())
+                    if selection < 1 or selection > len(domains):
+                        raise ValueError
+                    break
+                except ValueError:
+                    print("Invalid selection, try again.")
+            domain = domains[selecion-1]
+            if domain == "Knowledge":
+                options = ["Arcana", "Nature", "History", "Religion"]
+                for item in numbered(options):
+                    print(item)
+                print("Pick a skill to gain proficiency in. Proficiency multiplier will be doubled.")
+                for x in range(1,3):
+                    while True:
+                        try:
+                            selection = int(input("\n"))
+                            if selection < 1 or selection > len(options):
+                                raise ValueError
+                            if options[selection-1] in self.proficiencies["proficiencies"]:
+                                raise CustomExcept
+                            self.proficiencies["proficiencies"].append(option[selection-1])
+                            self.proficiencies["doubled"].append(option[selection-1])
+                            break
+                        except ValueError:
+                            print("Invalid selection, please try again.")
+                        except CustomExcept:
+                            print("You may only become proficient in this skill once. Please select a different skill.")
+            if domain == "Nature":
+                options = ["Animal handling", "Nature", "Survival"]
+                for item in numbered(options):
+                    print(item)
+                print("Choose a skill to gain proficiency")
+                while True:
+                    try:
+                        selection = int(input("\n"))
+                        if selection < 1 or selection > len(options):
+                            raise ValueError
+                        if options[selection-1] in self.proficiencies["proficiencies"]:
+                            raise CustomExcept
+                        self.proficiencies["proficiencies"].append(options[selection-1])
+                        break
+                    except ValueError:
+                        print("Invalid selection, try again.")
+                    except CustomExcept:
+                        print("You are already proficient in this skill, please choose another.")
+        if cl == "Fighter" and level == 6 or cl == "Fighter" and level == 14:
+            scores = list(self.scores.keys())
+            for x in range(1,3):
+                formattedscores = []
+                for item in scores:
+                    formattedscores.append("{} [{}]".format(item,self.scores[item]))
+                columns(numbered(formattedscores))
+                print("Choose an ability score to increase by 1 point.")
+                while True:
+                    try:
+                        selection = int(input("\n"))
+                        if selection < 1 or selection > len(scores):
+                            raise ValueError
+                        selectedscore = scores[selection-1]
+                        if self.scores[selectedscore] == 20:
+                            raise CustomExcept
+                        self.scores[selectedscore] += 1
+                        break
+                    except ValueError:
+                        print("Invalid selectoin, try again.")
+                    except CustomExcept:
+                        print("Ability scores cannot exceed 20, please select a different score.")
+    
+    # Class function to recalculate character sheet after a skill score or proficiency has changed
+    def recalculate(self):
+        for score in list(self.abilitycalculation.keys()):
+            for skill in self.abilitycalculation[score]:
+                skillscore = (self.scores[score]-10) // 2
+                self.stats[skill] = skillscore
+        modifier = 1 + int(math.ceil(float(self.level) * 0.25))
+        for item in self.proficiencies["proficiencies"]:
+            if item in self.proficiencies["doubled"]:
+                self.stats[item] += (modifier*2)
+            else:
+                self.stats[item] += modifier
+        for item in list(self.stats.keys())[:5]:
+            if item in self.classbuffs[self.setclass]["throws"]:
+                self.stats[item] += modifier    
+    
     # Class function to export a character sheet once character building has been completed.
     def export(self):
         csvout = {"Name": self.name, "Path Name": self.pathname, "Level": self.level, "Class": self.setclass, "Background": self.background, "Ability scores": self.scores, "Stats": self.stats, "Proficiencies": self.proficiencies}
