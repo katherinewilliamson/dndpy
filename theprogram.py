@@ -3,10 +3,12 @@
 import csv
 import math
 
+
 # Defines a custom error that can be raised to give more information on why a user input failed
 class CustomExcept(Exception):
     pass
     
+
 # Defines a character class. Each character that is created will be part of this class, with each part of the character sheet as a variable
 class Character:
     name = ""
@@ -34,18 +36,17 @@ class Character:
     # Universal variable for level events based on class
     classevents = {'Bard': ['3', '10'], 'Cleric': ['1'], 'Fighter': ['6', '14'], 'Rogue': ['1', '6', '10', '15']}
 
-    
     # Universal variable to determine skill buffs based on background
     backgroundbuffs = {'Acolyte': ['Insight', 'Religion'], 'Charlatan': ['Deception', 'Sleight of hand'], 'Criminal': ['Deception', 'Stealth'], 'Spy': ['Deception', 'Stealth'], 'Entertainer': ['Acrobatics', 'Performance'], 'Gladiator': ['Acrobatics', 'Performance'], 'Folk hero': ['Animal handling', 'Survival'], 'Guild artisan': ['Insight', 'Persuasion'], 'Guild Merchant': ['Insight', 'Persuasion'], 'Hermit': ['Medicine', 'Religion'], 'Noble': ['History', 'Persuasion'], 'Knight': ['History', 'Persuasion'], 'Outlander': ['Athletics', 'Survival'], 'Sage': ['Arcana', 'History'], 'Sailor': ['Athletics', 'Perception'], 'Pirate': ['Athletics', 'Perception'], 'Soldier': ['Athletics', 'Intimidation'], 'Urchin': ['Sleight of hand', 'Stealth']}
 
     # Universal variable to aid in calculating skill stats based on ability scores
     abilitycalculation = {'Strength': ['Strength', 'Athletics'], 'Dexterity': ['Dexterity', 'Acrobatics', 'Slight of hand', 'Stealth'], 'Constitution': ['Constitution'], 'Intelligence': ['Intelligence', 'Arcana', 'History', 'Investigation', 'Nature', 'Religion'], 'Wisdom': ['Wisdom', 'Animal handling', 'Insight', 'Medicine', 'Perception', 'Survival'], 'Charisma': ['Charisma', 'Deception', 'Intimidation', 'Performance', 'Persuasion']}
 
- # Class function to handle character class special level events
+    # Class function to handle character class special level events
     def classevent(self, level):
         cl = self.setclass
         if cl == "Bard":
-            if level==3:
+            if level == 3:
                 # Character can choose their bard college. If they choose the college of lore, they gain 3 proficiencies
                 print("Choose your college:\n(1): College of Lore    (2): College of Valor")
                 while True:
@@ -66,7 +67,7 @@ class Character:
                             options.append(item)
                     optionsformat = columns(numbered(options), False)
                     columns(optionsformat)
-                    for x in range(1,4):
+                    for x in range(1, 4):
                         while True:
                             try:
                                 chosenprof = int(input("Choose 3 proficiencies.    {}\n".format(chosenprofs)))
@@ -85,7 +86,7 @@ class Character:
                         self.proficiencies["proficiencies"].append(item)
                 chosenexpertise = []
                 # Level 3 Bards also choose 2 proficiencies to gain expertise in.
-                for x in range(1,3):
+                for x in range(1, 3):
                     profoptions = self.proficiencies["proficiencies"]
                     for item in numbered(profoptions):
                         print(item)
@@ -107,7 +108,7 @@ class Character:
             # At level 10, bards gain expertise in two more proficiencies
             if level == 10:                       
                 chosenexpertise = []
-                for x in range(1,3):
+                for x in range(1, 3):
                     profoptions = []
                     for item in self.proficiencies["proficiencies"]:
                         if item in self.proficiencies["doubled"]:
@@ -132,8 +133,8 @@ class Character:
                         except CustomExcept:
                             print("You're already an expert, please select another option.")
         if cl == "Cleric" and level == 1:
-            # At level 1, Clerics join a domain. Depending on thier domain, they may gain 
-            domains = ["Knowledge", "Life", "Light", "Nature", "Temptest", "Trickery", "War"]
+            # At level 1, Clerics join a domain. Depending on their domain, they may gain proficiencies
+            domains = ["Knowledge", "Life", "Light", "Nature", "Tempest", "Trickery", "War"]
             print("Choose a divine domain:")
             columns(numbered(domains))
             while True:
@@ -150,7 +151,7 @@ class Character:
                 for item in numbered(options):
                     print(item)
                 print("Pick a skill to gain proficiency in. Proficiency multiplier will be doubled.")
-                for x in range(1,3):
+                for x in range(1, 3):
                     while True:
                         try:
                             selection = int(input("\n"))
@@ -185,10 +186,10 @@ class Character:
                         print("You are already proficient in this skill, please choose another.")
         if cl == "Fighter" and level == 6 or cl == "Fighter" and level == 14:
             scores = list(self.scores.keys())
-            for x in range(1,3):
+            for x in range(1, 3):
                 formattedscores = []
                 for item in scores:
-                    formattedscores.append("{} [{}]".format(item,self.scores[item]))
+                    formattedscores.append("{} [{}]".format(item, self.scores[item]))
                 columns(numbered(formattedscores))
                 print("Choose an ability score to increase by 1 point.")
                 while True:
@@ -202,7 +203,7 @@ class Character:
                         self.scores[selectedscore] += 1
                         break
                     except ValueError:
-                        print("Invalid selectoin, try again.")
+                        print("Invalid selection, try again.")
                     except CustomExcept:
                         print("Ability scores cannot exceed 20, please select a different score.")
     
@@ -246,7 +247,7 @@ def bordered(text, buffer=""):
     return '\n'.join(res)
         
 
-#This is a formatting function for taking a list of strings and returning a formatted list with each option given a number value. This will be useful for building selection menus.
+# This is a formatting function for taking a list of strings and returning a formatted list with each option given a number value. This will be useful for building selection menus.
 def numbered(items):
     outputlist = []
     for index, item in enumerate(items):
