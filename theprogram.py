@@ -206,6 +206,82 @@ class Character:
                         print("Invalid selection, try again.")
                     except CustomExcept:
                         print("Ability scores cannot exceed 20, please select a different score.")
+        if cl == "Rogue":
+            if level == 1:
+                print("Choose a class option:\n(1): Thieves tools proficiency +1        (2): Double two skill proficiencies")
+                while True:
+                    try:
+                        choice = int(input("\n"))
+                        if choice < 1 or choice > 2:
+                            raise ValueError
+                        break
+                    except ValueError:
+                        print("Invalid selection, try again.")
+                if choice == 2:
+                    chosen = []
+                    for x in range (1, 3):
+                        columns(numbered(self.proficiencies["proficiencies"]))
+                        while True:
+                            try:
+                                selection = int(input("Pick an expertise.   {}".format(chosen)))
+                                if selection < 1 or selection > len(self.proficiencies["proficiencies"]):
+                                    raise ValueError
+                                selectedproficiency = self.proficiencies["proficiencies"][selection-1]
+                                if selectedproficiency in self.proficiencies["doubled"]:
+                                    raise CustomExcept
+                                self.proficiencies["doubled"].append(selectedproficiency)
+                                chosen.append(selectedproficiency)
+                                break
+                            except ValueError:
+                                print("Invalid input, try again.")
+                            except CustomExcept:
+                                print("You are already an expert in this, try again")
+            if level == 6 and self.proficiencies["doubled"] != []:
+                chosen = []
+                for x in range(1, 3):
+                    columns(numbered(self.proficiencies["proficiencies"]))
+                    while True:
+                        try:
+                            selection = int(input("Pick an expertise.   {}".format(chosen)))
+                            if selection < 1 or selection > len(self.proficiencies["proficiencies"]):
+                                raise ValueError
+                            selectedproficiency = self.proficiencies["proficiencies"][selection - 1]
+                            if selectedproficiency in self.proficiencies["doubled"]:
+                                raise CustomExcept
+                            self.proficiencies["doubled"].append(selectedproficiency)
+                            chosen.append(selectedproficiency)
+                            break
+                        except ValueError:
+                            print("Invalid input, try again.")
+                        except CustomExcept:
+                            print("You are already an expert in this, try again")
+            if level == 10:
+                scores = list(self.scores.keys())
+                for x in range(1, 3):
+                    formattedscores = []
+                    for item in scores:
+                        formattedscores.append("{} [{}]".format(item, self.scores[item]))
+                    columns(numbered(formattedscores))
+                    print("Choose an ability score to increase by 1 point.")
+                    while True:
+                        try:
+                            selection = int(input("\n"))
+                            if selection < 1 or selection > len(scores):
+                                raise ValueError
+                            selectedscore = scores[selection - 1]
+                            if self.scores[selectedscore] == 20:
+                                raise CustomExcept
+                            self.scores[selectedscore] += 1
+                            break
+                        except ValueError:
+                            print("Invalid selection, try again.")
+                        except CustomExcept:
+                            print("Ability scores cannot exceed 20, please select a different score.")
+            if level == 15:
+                self.proficiencies["proficiencies"].append("Wisdom")
+
+
+
     
     # Class function to recalculate character sheet after a skill score or proficiency has changed
     def recalculate(self):
@@ -221,7 +297,7 @@ class Character:
                 self.stats[item] += modifier
         for item in list(self.stats.keys())[:5]:
             if item in self.classbuffs[self.setclass]["throws"]:
-                self.stats[item] += modifier    
+                self.stats[item] += modifier
     
     # Class function to export a character sheet once character building has been completed.
     def export(self):
