@@ -44,15 +44,17 @@ class Character:
 
     # Class function to set up new character.
     def setup(self):
+        # User sets character level
         while True:
             try:
                 level = int(input("Character level:\n"))
-                if level < 0:
+                if level < 1:
                     raise ValueError
                 self.level = level
                 break
             except ValueError:
                 print("Invalid selection, try again.")
+        # User selects character race
         racelist = list(self.racebuffs.keys())
         formattedraces = columns(numbered(racelist), False)
         columns(formattedraces)
@@ -61,10 +63,12 @@ class Character:
                 selection = int(input("Select character race:\n"))
                 if selection < 1 or selection > len(racelist):
                     raise ValueError
-                self.race = racelist[selection-1]
+                race = racelist[selection-1]
+                self.race = race
                 break
             except ValueError:
                 print("Invalid selection, try again.")
+        # User selects character class.
         classlist = list(self.classbuffs.keys())
         formattedclass = columns(numbered(classlist), False)
         columns(formattedclass)
@@ -73,14 +77,100 @@ class Character:
                 selection = int(input("Character class: \n"))
                 if selection < 1 or selection > len(classlist):
                     raise ValueError
-                self.setclass = classlist[selection-1]
+                setclass = classlist[selection-1]
+                self.setclass = setclass
                 break
             except ValueError:
                 print("Invalid selection, try again.")
+        # User selects character background
         backgroundlist = list(self.backgroundbuffs.keys())
-        formattedbackground = 
-
-
+        formattedbackground = columns(numbered(backgroundlist), False)
+        columns(formattedbackground)
+        while True:
+            try:
+                selection = int(input("Character background:\n"))
+                if selection < 1 or selection > len(backgroundlist):
+                    raise ValueError
+                background = backgroundlist[selection-1]
+                self.background = background
+                break
+            except ValueError:
+                print("Invalid selection, try again.")
+        # Adds background-based proficiencies to proficiency list
+        for item in self.backgroundbuffs[background]:
+            self.proficiencies["proficiencies"].append(item)
+        # Take raw score for each ability. Checks for any race buffs and adds buff to the score.
+        for score in list(self.scores.keys()):
+            while True:
+                try:
+                    rawscore = int(input("Enter raw {} score.\n".format(score.lower())))
+                    if rawscore < 1:
+                        raise ValueError
+                    if score in self.racebuffs[race]:
+                        rawscore += self.racebuffs[race][score]
+                    self.scores[score] = rawscore
+                    break
+                except ValueError:
+                    print("Invalid input, try again.")
+        # User selects class-based proficiencies
+        proficiencyoptions = self.classbuffs[setclass]["skills"]
+        times = self.classbuffs[setclass]["howmany"]
+        if not all(item in self.proficiencies["proficiencies"] for item in proficiencyoptions):
+            selected = []
+            for x in range(1,times+1):
+                columns(proficiencyoptions)
+                while True:
+                    try:
+                        if all(item in self.proficiencies["proficiencies"] for item in proficiencyoptions):
+                            break
+                        selection = int(input("Select a proficiency:\n"))
+                        if selection < 1 or selection > len(proficiencyoptions):
+                            raise ValueError
+                        choice = proficiencyoptions[selection-1]
+                        if choice in selected:
+                            raise CustomExcept
+                        selected.append(choice)
+                        self.proficiencies["proficiencies"].append(choice)
+                        break
+                    except ValueError:
+                        print("Invalid selection, try again.")
+                    except CutstomExcept:
+                        print("You are already proficient, select another option.")
+        self.recalculate()
+        for x in range(1, self.level+1):
+            self.levelup(x, False)
+        export()
+            
+        
+    # Class function for increasing the level of a character
+    def levelup(self, level, autoexport=True):
+        if level in [4, 8, 12, 16, 19]:
+            scores = list(self.scores.keys())
+            for x in range(1, 3):
+                formattedscores = []
+                for item in scores:
+                    formattedscores.append("{} [{}]".format(item, self.scores[item]))
+                columns(numbered(formattedscores))
+                print("Choose an ability score to increase by 1 point.")
+                while True:
+                    try:
+                        selection = int(input("\n"))
+                        if selection < 1 or selection > len(scores):
+                            raise ValueError
+                        selectedscore = scores[selection - 1]
+                        if self.scores[selectedscore] == 20:
+                            raise CustomExcept
+                        self.scores[selectedscore] += 1
+                        break
+                    except ValueError:
+                        print("Invalid selection, try again.")
+                    except CustomExcept:
+                        print("Ability scores cannot exceed 20, please select a different score.")
+        if level in self.classevents[self.setclass]:
+            classevent(level)
+        if autoexport == True:
+            self.export()
+            
     
     # Class function to handle character class special level events
     def classevent(self, level):
@@ -97,7 +187,7 @@ class Character:
                         break
                     except ValueError:
                         print("Invalid selection, try again.")
-                if chosencollege == 1:
+                if chosencollege == 1 and not all(item in self.proficiencies["proficiencies"] for item in list(self.stats.keys())[5:]):
                     chosenprofs = []
                     options = []
                     for item in list(self.stats.keys())[5:]:
@@ -110,20 +200,21 @@ class Character:
                     for x in range(1, 4):
                         while True:
                             try:
+                                if options == [] or all(item in self.proficiencies["proficiencies"] for item in options):
+                                    break
                                 chosenprof = int(input("Choose 3 proficiencies.    {}\n".format(chosenprofs)))
-                                if options[chosenprof-1] in chosenprofs or options[chosenprof-1] in self.proficiencies["proficiencies"]:
+                                if options[chosenprof-1] in chosenprofs:
                                     raise CustomExcept
                                 elif chosenprof < 1 or chosenprof > len(options):
                                     raise ValueError
                                 else:
                                     chosenprofs.append(options[chosenprof-1])
+                                    self.proficiencies["proficiencies"].append(options[chosenprof-1])
                                     break
                             except CustomExcept:
                                 print("Please select each proficiency only once.")
                             except ValueError:
                                 print("Invalid selection, try again.")
-                    for item in chosenprofs:
-                        self.proficiencies["proficiencies"].append(item)
                 chosenexpertise = []
                 # Level 3 Bards also choose 2 proficiencies to gain expertise in.
                 for x in range(1, 3):
@@ -186,8 +277,10 @@ class Character:
                 except ValueError:
                     print("Invalid selection, try again.")
             domain = domains[selecion-1]
-            if domain == "Knowledge":
-                options = ["Arcana", "Nature", "History", "Religion"]
+            knowledgeoptions = ["Arcana", "Nature", "History", "Religion"]
+            natureoptions = ["Animal handling", "Nature", "Survival"]
+            if domain == "Knowledge" and not all(option in self.proficiencies["proficiencies"] for option in knowledgeoptions):
+                options = knowledgeoptions
                 for item in numbered(options):
                     print(item)
                 print("Pick a skill to gain proficiency in. Proficiency multiplier will be doubled.")
@@ -206,8 +299,8 @@ class Character:
                             print("Invalid selection, please try again.")
                         except CustomExcept:
                             print("You may only become proficient in this skill once. Please select a different skill.")
-            if domain == "Nature":
-                options = ["Animal handling", "Nature", "Survival"]
+            if domain == "Nature" and not all(option in self.proficiencies["proficiencies"] for option in natureoptions):
+                options = natureoptions
                 for item in numbered(options):
                     print(item)
                 print("Choose a skill to gain proficiency")
