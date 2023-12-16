@@ -42,6 +42,10 @@ class Character:
     # Universal variable to aid in calculating skill stats based on ability scores
     abilitycalculation = {'Strength': ['Strength', 'Athletics'], 'Dexterity': ['Dexterity', 'Acrobatics', 'Sleight of hand', 'Stealth'], 'Constitution': ['Constitution'], 'Intelligence': ['Intelligence', 'Arcana', 'History', 'Investigation', 'Nature', 'Religion'], 'Wisdom': ['Wisdom', 'Animal handling', 'Insight', 'Medicine', 'Perception', 'Survival'], 'Charisma': ['Charisma', 'Deception', 'Intimidation', 'Performance', 'Persuasion']}
 
+    def __init__(self, name):
+        if name is not None:
+            self.name = name
+    
     # Class function to set up new character.
     def setup(self):
         # User sets character level
@@ -118,7 +122,7 @@ class Character:
         if not all(item in self.proficiencies["proficiencies"] for item in proficiencyoptions):
             selected = []
             for x in range(1,times+1):
-                columns(proficiencyoptions)
+                columns(numbered(proficiencyoptions))
                 while True:
                     try:
                         if all(item in self.proficiencies["proficiencies"] for item in proficiencyoptions):
@@ -134,12 +138,12 @@ class Character:
                         break
                     except ValueError:
                         print("Invalid selection, try again.")
-                    except CutstomExcept:
+                    except CustomExcept:
                         print("You are already proficient, select another option.")
         self.recalculate()
         for x in range(1, self.level+1):
             self.levelup(x, False)
-        export()
+        self.export()
             
         
     # Class function for increasing the level of a character
@@ -154,7 +158,7 @@ class Character:
                 print("Choose an ability score to increase by 1 point.")
                 while True:
                     try:
-                        selection = int(input("\n"))
+                        selection = int(input(""))
                         if selection < 1 or selection > len(scores):
                             raise ValueError
                         selectedscore = scores[selection - 1]
@@ -166,7 +170,7 @@ class Character:
                         print("Invalid selection, try again.")
                     except CustomExcept:
                         print("Ability scores cannot exceed 20, please select a different score.")
-        if level in self.classevents[self.setclass]:
+        if self.setclass in list(self.classevents.keys()) and level in self.classevents[self.setclass]:
             classevent(level)
         if autoexport == True:
             self.export()
@@ -327,7 +331,7 @@ class Character:
                 print("Choose an ability score to increase by 1 point.")
                 while True:
                     try:
-                        selection = int(input("\n"))
+                        selection = int(input())
                         if selection < 1 or selection > len(scores):
                             raise ValueError
                         selectedscore = scores[selection-1]
@@ -473,3 +477,15 @@ def columns(itemlist, printiterations=True):
             returnlist.append('{:<30}{:<30}'.format(item, next(items, "")))
     if not printiterations:
         return returnlist
+        
+def create():
+    while True:
+        rawname = input("What is the name of your character? \n".format()).strip()
+        if all(c.isalpha() or c.isspace() for c in rawname):
+            break
+        else:
+            print("Name contains script that is unsupported. Try again.")
+    charactername = "_".join(rawname.split())
+    charactername = Character(rawname)
+    charactername.setup()
+
