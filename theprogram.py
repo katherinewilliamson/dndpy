@@ -2,6 +2,8 @@
 
 import csv
 import math
+import os
+import re
 
 
 # Defines a custom error that can be raised to give more information on why a user input failed
@@ -17,7 +19,7 @@ class Character:
     setclass = ""
     background = ""
     # Variable for a path-friendly version of the character name
-    pathname = "_".join(name.split())
+    pathname = ""
     # Variable for selected ability score proficiencies
     proficiencies = {"proficiencies": [], "doubled": []}
     
@@ -42,9 +44,10 @@ class Character:
     # Universal variable to aid in calculating skill stats based on ability scores
     abilitycalculation = {'Strength': ['Strength', 'Athletics'], 'Dexterity': ['Dexterity', 'Acrobatics', 'Sleight of hand', 'Stealth'], 'Constitution': ['Constitution'], 'Intelligence': ['Intelligence', 'Arcana', 'History', 'Investigation', 'Nature', 'Religion'], 'Wisdom': ['Wisdom', 'Animal handling', 'Insight', 'Medicine', 'Perception', 'Survival'], 'Charisma': ['Charisma', 'Deception', 'Intimidation', 'Performance', 'Persuasion']}
 
-    def __init__(self, name):
+    def __init__(self, name=None):
         if name is not None:
             self.name = name
+            self.pathname = "_".join(name.split())
     
     # Class function to set up new character.
     def setup(self):
@@ -436,9 +439,10 @@ class Character:
     
     # Class function to export a character sheet once character building has been completed.
     def export(self):
-        csvout = {"Name": self.name, "Path Name": self.pathname, "Level": self.level, "Class": self.setclass, "Background": self.background, "Ability scores": self.scores, "Stats": self.stats, "Proficiencies": self.proficiencies}
+        csvout = {"Name": self.name, "Path Name": self.pathname, "Level": self.level, "Class": self.setclass, "Race": self.race, "Background": self.background, "Ability scores": self.scores, "Stats": self.stats, "Proficiencies": self.proficiencies}
         fields = list(csvout.keys())
-        with open("charactersheet_" + self.pathname + ".csv", "w", newline="") as csvfile:
+        filename = "charactersheet_" + self.pathname + ".csv"
+        with open(filename, "w", newline="") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fields)
             writer.writeheader()
             writer.writerow(csvout)
@@ -488,4 +492,60 @@ def create():
     charactername = "_".join(rawname.split())
     charactername = Character(rawname)
     charactername.setup()
+    return charactername
+
+def startup():
+    characterfiles = []
+    directorylist = os.listdir()
+    for item in directorylist:
+        if re.match(r"charactersheet_([\w_]*)\.csv", item):
+            characterfiles.append(item)
+    if characterfiles:
+        characterdirectory = {}
+        for index, file in enumerate(characterfiles):
+            charactername = re.search(r"charactersheet_([\w_]*)\.csv", file)
+            charactername = " ".join(charactername.group(1).split("_"))
+            characterdirectory[charactername] = index
+        characters = list(characterdirectory.keys())
+        print("Select from existing character sheets or enter 0 to create a new character.\n(0): Create new character")
+        columns(numbered(characters))
+        while True:
+            try:
+                selection = int(input())
+                if selection < 0 or selection > len(characters):
+                    raise ValueError
+                character = characters[selection-1]
+                break
+            except ValueError:
+                print("Invalid selection, try again.")
+        fileindex = characterdirectory[character]
+        chosenfile = characterfiles[fileindex]
+        csvkeys = {'Name': "name", 'Path Name': "pathname", 'Level': "level", 'Class': "setclass", 'Race': "race", 'Background': "background", 'Ability scores': "scores", 'Stats': "stats", 'Proficiencies': "proficiencies"}
+        with open(chosenfile, "r") as file:
+            for row in csv.DictReader(file):
+                loadedcharacter = row
+        if all(item in list(csvkeys.keys()) for item in list(loadedcharacter.keys())):
+            loadedname = loadedcharacter["Path Name"]
+            loadedname = Character()
+            for value in list(csvkeys.keys()):
+                variablename = csvkeys[value]
+                loadedvalue = loadedcharacter[value]
+                loadedname.variablename = loadedvalue
+            return loadedname
+        else:
+            while True:
+                try:
+                    selection = int(input("There was a problem loading the selected character sheet. Enter 1 to delete the file and return to character selection or 2 to return to character selection without deleting.\n"))
+                    if selection < 1 or selection > 2:
+                        return ValueError
+                    break
+                except ValueError:
+                    print("Invalid selection, try again.")
+            if selection == 1:
+                os.remove(chosenfile)
+            startup()
+    else:
+        return create()
+
+startup()
 
