@@ -146,6 +146,7 @@ class Character:
         self.recalculate()
         for x in range(1, self.level+1):
             self.levelup(x, False)
+        self.recalculate()
         self.export()
             
         
