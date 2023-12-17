@@ -525,7 +525,7 @@ def startup():
         with open(chosenfile, "r") as file:
             for row in csv.DictReader(file):
                 loadedcharacter = row
-        if all(item in list(csvkeys.keys()) for item in list(loadedcharacter.keys())):
+        if all(item in list(csvkeys.keys()) for item in list(loadedcharacter.keys())) and all(item in list(loadedcharacter.keys()) for item in list(csvkeys.keys())):
             loadedname = loadedcharacter["Path Name"]
             loadedname = Character()
             for value in list(csvkeys.keys()):
