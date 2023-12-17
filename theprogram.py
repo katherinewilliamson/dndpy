@@ -4,6 +4,7 @@ import csv
 import math
 import os
 import re
+import ast
 
 
 # Defines a custom error that can be raised to give more information on why a user input failed
@@ -44,10 +45,23 @@ class Character:
     # Universal variable to aid in calculating skill stats based on ability scores
     abilitycalculation = {'Strength': ['Strength', 'Athletics'], 'Dexterity': ['Dexterity', 'Acrobatics', 'Sleight of hand', 'Stealth'], 'Constitution': ['Constitution'], 'Intelligence': ['Intelligence', 'Arcana', 'History', 'Investigation', 'Nature', 'Religion'], 'Wisdom': ['Wisdom', 'Animal handling', 'Insight', 'Medicine', 'Perception', 'Survival'], 'Charisma': ['Charisma', 'Deception', 'Intimidation', 'Performance', 'Persuasion']}
 
-    def __init__(self, name=None):
+    def __init__(self, name=None, loaded=None):
+        # If a character is being created for the first time, the input name can be passed through to set that and automatically generate the path-friendly name. If a character is being loaded, the dictionary generated from the CSV file can be passed and each required variable will be processed.
         if name is not None:
             self.name = name
             self.pathname = "_".join(name.split())
+        if loaded is not None:
+            self.name = loaded['Name']
+            self.pathname = loaded['Path Name']
+            self.level = loaded['Level']
+            self.setclass = loaded['Class']
+            self.race = loaded['Race']
+            self.background = loaded['Background']
+            # Python will see the values that are dictionaries as strings by default. ast.literal_eval converts them to a python object.
+            self.scores = ast.literal_eval(loaded['Ability scores'])
+            self.stats = ast.literal_eval(loaded['Stats'])
+            self.proficiencies = ast.literal_eval(loaded['Proficiencies'])
+            
     
     # Class function to set up new character.
     def setup(self):
@@ -445,6 +459,27 @@ class Character:
             # Checks for class-based skill throw proficiencies
             if item in self.classbuffs[self.setclass]["throws"]:
                 self.stats[item] += modifier
+            
+    # Class function to print a formatted, readable version of the character sheet to screen.
+    def charactersheet(self):
+        skills = list(self.stats.keys())[5:]
+        savingthrows = list(self.stats.keys())[:5]
+        print("-"*110)
+        print("| {} |".format(self.name).center(110, "|"))
+        print("-"*110)
+        print("| Level {} | {} | {} | {} |".format(self.level, self.race, self.setclass, self.background).center(110))
+        print("-"*110)
+        throwsinformation = ["| Saving Throws: |".center(110, "-")]
+        throwswithstats = []
+        for item in savingthrows:
+            throwswithstats.append("{}: [{}]".format(item, self.stats[item]))
+        throwsinformation.append("{} | {} | {} | {} | {}".format(throwswithstats[0], throwswithstats[1], throwswithstats[2], throwswithstats[3], throwswithstats[4]).center(110))
+        print(bordered(throwsinformation))
+        skillsinformation = []
+        for item in skills:
+            skillsinformation.append("{}: [{}]".format(item, self.stats[item]))
+        skillsinformation = columns(skillsinformation, False)
+        columns(skillsinformation)
     
     # Class function to export a character sheet once character building has been completed.
     def export(self):
@@ -536,40 +571,38 @@ def startup():
                 print("Invalid selection, try again.")
         fileindex = characterdirectory[character]
         chosenfile = characterfiles[fileindex]
-        # csvkeys variable associates the fieldnames used in CSV output with the Character variables to help in importing a file.
-        csvkeys = {'Name': "name", 'Path Name': "pathname", 'Level': "level", 'Class': "setclass", 'Race': "race", 'Background': "background", 'Ability scores': "scores", 'Stats': "stats", 'Proficiencies': "proficiencies"}
-        # Opens the associated character file and stores the information in a variable as a dictionary.
-        with open(chosenfile, "r") as file:
-            for row in csv.DictReader(file):
-                loadedcharacter = row
-        # Checks to make sure that each required item is present in the CSV file. If so, initiates an instance of the Character class with the character's path-friendly name.
-        if all(item in list(csvkeys.keys()) for item in list(loadedcharacter.keys())) and all(item in list(loadedcharacter.keys()) for item in list(csvkeys.keys())):
-            loadedname = loadedcharacter["Path Name"]
-            loadedname = Character()
-            # Processes the loaded dictionary variable item by item and sets each piece of required character information in the new instance of the Character class. 
-            for value in list(csvkeys.keys()):
-                variablename = csvkeys[value]
-                loadedvalue = loadedcharacter[value]
-                loadedname.variablename = loadedvalue
-            # Returns the loaded name to be stored in the variable that tracks the current active character.
-            return loadedname
-        else:
-            # If the selected character is missing any required information in its CSV file, the user is informed that there was an error and is given the option to delete the file or to return to the character selection menu while leaving the file in tact.
-            while True:
-                try:
-                    selection = int(input("There was a problem loading the selected character sheet. Enter 1 to delete the file and return to character selection or 2 to return to character selection without deleting.\n"))
-                    if selection < 1 or selection > 2:
-                        return ValueError
-                    break
-                except ValueError:
-                    print("Invalid selection, try again.")
-            if selection == 1:
-                # Deletes the problem file.
-                os.remove(chosenfile)
-            startup()
+        if selection != 0:
+            # csvkeys variable associates the fieldnames used in CSV output with the Character variables to help in importing a file.
+            csvkeys = {'Name': "name", 'Path Name': "pathname", 'Level': "level", 'Class': "setclass", 'Race': "race", 'Background': "background", 'Ability scores': "scores", 'Stats': "stats", 'Proficiencies': "proficiencies"}
+            # Opens the associated character file and stores the information in a variable as a dictionary.
+            with open(chosenfile, "r") as file:
+                for row in csv.DictReader(file):
+                    loadedcharacter = row
+            # Checks to make sure that each required item is present in the CSV file. If so, initiates an instance of the Character class with the character's path-friendly name.
+            if all(item in list(csvkeys.keys()) for item in list(loadedcharacter.keys())) and all(item in list(loadedcharacter.keys()) for item in list(csvkeys.keys())):
+                loadedname = loadedcharacter["Path Name"]
+                loadedname = Character(None, loadedcharacter)
+                # Returns the loaded name to be stored in the variable that tracks the current active character.
+                return loadedname
+            else:
+                # If the selected character is missing any required information in its CSV file, the user is informed that there was an error and is given the option to delete the file or to return to the character selection menu while leaving the file in tact.
+                while True:
+                    try:
+                        selection = int(input("There was a problem loading the selected character sheet. Enter 1 to delete the file and return to character selection or 2 to return to character selection without deleting.\n"))
+                        if selection < 1 or selection > 2:
+                            return ValueError
+                        break
+                    except ValueError:
+                        print("Invalid selection, try again.")
+                if selection == 1:
+                    # Deletes the problem file.
+                    os.remove(chosenfile)
+                startup()
+        if selection == 0:
+            return create()
     else:
         # Automatically runs the character creation function if no character file is present.
         return create()
 
-startup()
-
+activecharacter = startup()
+activecharacter.charactersheet()
