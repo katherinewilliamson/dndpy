@@ -143,15 +143,19 @@ class Character:
                         print("Invalid selection, try again.")
                     except CustomExcept:
                         print("You are already proficient, select another option.")
+        # Does an initial calculation of the character's stats without exporting. This is so that if they are referenced during a class-based level event, they will be available.
         self.recalculate()
+        # Runs the level up function once for each level a character has achieved in sequence. Auto-export is set to False so a new CSV file isn't generated for every level.
         for x in range(1, self.level+1):
             self.levelup(x, False)
+        # Recalculates the character sheet a final time, then runs the export function to create a file for the character in the current directory.
         self.recalculate()
         self.export()
             
         
-    # Class function for increasing the level of a character
+    # Class function for increasing the level of a character. The the autoexport parameter (default set to True) determines whether or not a new CSV file for the character will be created. This is useful when iterating over several levels at one time.
     def levelup(self, level, autoexport=True):
+        # Checks to see if a character is eligible for level-based score increases. If a character's class has additional levels at which this happens, it will be handled in the classevent function
         if level in [4, 8, 12, 16, 19]:
             scores = list(self.scores.keys())
             for x in range(1, 3):
@@ -174,6 +178,7 @@ class Character:
                         print("Invalid selection, try again.")
                     except CustomExcept:
                         print("Ability scores cannot exceed 20, please select a different score.")
+        # Checks to see if a character has any level events and runs the classevent function if one is present.
         if self.setclass in list(self.classevents.keys()) and level in self.classevents[self.setclass]:
             classevent(level)
         if autoexport == True:
@@ -424,10 +429,12 @@ class Character:
 
     # Class function to recalculate character sheet after a skill score or proficiency has changed
     def recalculate(self):
+        # Sets each skill score based on its related ability score using a formula to calculate the appropriate number.
         for score in list(self.abilitycalculation.keys()):
             for skill in self.abilitycalculation[score]:
                 skillscore = (self.scores[score]-10) // 2
                 self.stats[skill] = skillscore
+        # Uses a formula to calculate the proficiency modifier based on character level. Checks each proficiency for an expertise and applies the modifier accordingly.
         modifier = 1 + int(math.ceil(float(self.level) * 0.25))
         for item in self.proficiencies["proficiencies"]:
             if item in self.proficiencies["doubled"]:
@@ -435,6 +442,7 @@ class Character:
             else:
                 self.stats[item] += modifier
         for item in list(self.stats.keys())[:5]:
+            # Checks for class-based skill throw proficiencies
             if item in self.classbuffs[self.setclass]["throws"]:
                 self.stats[item] += modifier
     
@@ -483,6 +491,7 @@ def columns(itemlist, printiterations=True):
     if not printiterations:
         return returnlist
         
+# Function asks user for input, checks if it is a valid character name, and creates an instance of the Character class using that name. It then initates the setup function for that character.
 def create():
     while True:
         rawname = input("What is the name of your character? \n".format()).strip()
@@ -490,24 +499,30 @@ def create():
             break
         else:
             print("Name contains script that is unsupported. Try again.")
+    # Creates and stores a path-friendly version of the name.
     charactername = "_".join(rawname.split())
     charactername = Character(rawname)
     charactername.setup()
+    # Returns the created name to be stored in the variable that tracks the character being actively used.
     return charactername
 
+# This function runs at startup and checks to see if there are any existing character sheets present. If there are none, it initiates character creation.
 def startup():
+    # Checks the surrounding directory for any CSV files matching the naming convention used by the script. It then stores these filenames in the characterfiles variable.
     characterfiles = []
     directorylist = os.listdir()
     for item in directorylist:
         if re.match(r"charactersheet_([\w_]*)\.csv", item):
             characterfiles.append(item)
     if characterfiles:
+        # If there are files present, they are enumarated into the index number and file name. The file name is then processed via regex from its path friendly version to its reader friendly version, and the reader friendly name is stored in a directory along with the index number of its associated file.
         characterdirectory = {}
         for index, file in enumerate(characterfiles):
             charactername = re.search(r"charactersheet_([\w_]*)\.csv", file)
             charactername = " ".join(charactername.group(1).split("_"))
             characterdirectory[charactername] = index
         characters = list(characterdirectory.keys())
+        # The list of characters is displayed to the user to select. If the user wants to create a new character, they enter 0. Otherwise, when selected, that character is referenced back to find the associated file. 
         print("Select from existing character sheets or enter 0 to create a new character.\n(0): Create new character")
         columns(numbered(characters))
         while True:
@@ -521,19 +536,25 @@ def startup():
                 print("Invalid selection, try again.")
         fileindex = characterdirectory[character]
         chosenfile = characterfiles[fileindex]
+        # csvkeys variable associates the fieldnames used in CSV output with the Character variables to help in importing a file.
         csvkeys = {'Name': "name", 'Path Name': "pathname", 'Level': "level", 'Class': "setclass", 'Race': "race", 'Background': "background", 'Ability scores': "scores", 'Stats': "stats", 'Proficiencies': "proficiencies"}
+        # Opens the associated character file and stores the information in a variable as a dictionary.
         with open(chosenfile, "r") as file:
             for row in csv.DictReader(file):
                 loadedcharacter = row
+        # Checks to make sure that each required item is present in the CSV file. If so, initiates an instance of the Character class with the character's path-friendly name.
         if all(item in list(csvkeys.keys()) for item in list(loadedcharacter.keys())) and all(item in list(loadedcharacter.keys()) for item in list(csvkeys.keys())):
             loadedname = loadedcharacter["Path Name"]
             loadedname = Character()
+            # Processes the loaded dictionary variable item by item and sets each piece of required character information in the new instance of the Character class. 
             for value in list(csvkeys.keys()):
                 variablename = csvkeys[value]
                 loadedvalue = loadedcharacter[value]
                 loadedname.variablename = loadedvalue
+            # Returns the loaded name to be stored in the variable that tracks the current active character.
             return loadedname
         else:
+            # If the selected character is missing any required information in its CSV file, the user is informed that there was an error and is given the option to delete the file or to return to the character selection menu while leaving the file in tact.
             while True:
                 try:
                     selection = int(input("There was a problem loading the selected character sheet. Enter 1 to delete the file and return to character selection or 2 to return to character selection without deleting.\n"))
@@ -543,9 +564,11 @@ def startup():
                 except ValueError:
                     print("Invalid selection, try again.")
             if selection == 1:
+                # Deletes the problem file.
                 os.remove(chosenfile)
             startup()
     else:
+        # Automatically runs the character creation function if no character file is present.
         return create()
 
 startup()
