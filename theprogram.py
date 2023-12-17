@@ -464,12 +464,12 @@ class Character:
     def charactersheet(self):
         skills = list(self.stats.keys())[5:]
         savingthrows = list(self.stats.keys())[:5]
-        print("-"*110)
-        print("| {} |".format(self.name).center(110, "|"))
-        print("-"*110)
+        print(" "+"-"*110)
+        print(" "+"| {} |".format(self.name).center(109, "|"))
+        print(" "+"-"*110)
         print("| Level {} | {} | {} | {} |".format(self.level, self.race, self.setclass, self.background).center(110))
-        print("-"*110)
-        throwsinformation = ["| Saving Throws: |".center(110, "-")]
+        print(" "+"-"*110)
+        throwsinformation = ["| Saving Throws |".center(110, "-")]
         throwswithstats = []
         for item in savingthrows:
             throwswithstats.append("{}: [{}]".format(item, self.stats[item]))
@@ -478,8 +478,11 @@ class Character:
         skillsinformation = []
         for item in skills:
             skillsinformation.append("{}: [{}]".format(item, self.stats[item]))
+        print("|"+"| Skills |".center(108)+"  |")
+        print(" "+"-"*110)
         skillsinformation = columns(skillsinformation, False)
         columns(skillsinformation)
+        print(" "+"-"*110)
     
     # Class function to export a character sheet once character building has been completed.
     def export(self):
@@ -606,3 +609,4 @@ def startup():
 
 activecharacter = startup()
 activecharacter.charactersheet()
+
