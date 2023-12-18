@@ -5,6 +5,7 @@ import math
 import os
 import re
 import ast
+import random
 
 
 # Defines a custom error that can be raised to give more information on why a user input failed
@@ -53,7 +54,7 @@ class Character:
         if loaded is not None:
             self.name = loaded['Name']
             self.pathname = loaded['Path Name']
-            self.level = loaded['Level']
+            self.level = ast.literal_eval(loaded['Level'])
             self.setclass = loaded['Class']
             self.race = loaded['Race']
             self.background = loaded['Background']
@@ -196,6 +197,8 @@ class Character:
         if self.setclass in list(self.classevents.keys()) and level in self.classevents[self.setclass]:
             classevent(level)
         if autoexport == True:
+            self.level = level
+            self.recalculate()
             self.export()
             
     
@@ -528,6 +531,45 @@ def columns(itemlist, printiterations=True):
             returnlist.append('{:<30}{:<30}'.format(item, next(items, "")))
     if not printiterations:
         return returnlist
+
+def roll(amount=None, die=None, modifier=0):
+    if die is None:
+        while True:
+            try:
+                die = int(input("Roll me a \n    ----> D".format()))
+                if die > 100 or die < 2:
+                    raise CustomExcept
+                break
+            except ValueError:
+                print("Invalid input, try again.")
+            except CustomExcept:
+                print("Don't be ridiculous, try again.")
+    if amount is None:
+        print("How many dice would you like to roll? Leave blank to roll once.")
+        while True:
+            try:
+                amount = int(input() or 1)
+                if amount < 1:
+                    raise ValueError
+                if amount > 100:
+                    raise CustomExcept
+                break
+            except ValueError:
+                print("Invalid input, please try again.")
+            except CustomExcept:
+                print("Don't be greedy. Try again.")
+    if amount == 1:
+        result = random.randint(1, die)+modifier
+        print("Result: {}".format(result))
+        input("...")
+    else:
+        results = []
+        for x in range(1, amount+1):
+            result = random.randint(1, die) + modifier
+            results.append(result)
+        print("Results: {}\nTotal: {}".format(results, sum(results)))
+        input("...")
+        
         
 # Function asks user for input, checks if it is a valid character name, and creates an instance of the Character class using that name. It then initates the setup function for that character.
 def create():
@@ -607,6 +649,109 @@ def startup():
         # Automatically runs the character creation function if no character file is present.
         return create()
 
-activecharacter = startup()
-activecharacter.charactersheet()
+def characteroptions(character):
+    options = ["View character sheet", "Level up", "Reset my luck", "Reset character information", "Delete character", "Return"]
+    columns(numbered(options))
+    while True:
+        try:
+            selection = int(input())
+            if selection < 1 or selection > len(options):
+                raise ValueError
+            break
+        except ValueError:
+            print("Invalid selection, try again.")
+    if selection == 1:
+        character.charactersheet()
+        input()
+        characteroptions(character)
+    if selection == 2:
+        level = character.level+1
+        character.levelup(level)
+        print("{} is now level {}.".format(character.name, character.level))
+    if selection == 3:
+        # Resets the seed for the random module
+        random.seed()
+        print("Your fortune has been refreshed. Good luck!")
+    if selection == 4:
+        print("This will wipe all of your character's stats & start the setup over. Are you sure?\nEnter (1) to proceed or (2) to go back.")
+        while True:
+            try:
+                selection = int(input())
+                if selection < 1 or selection > 2:
+                    raise ValueError
+                break
+            except ValueError:
+                print("Invalid selection, try again.")
+        if selection == 1:
+            character.setup()
+        if selection == 2:
+            characteroptions(character)
+    if selection == 5:
+        print("This will delete your character & the file containing their information. Are you sure?\nEnter (1) to proceed or (2) to go back.")
+        while True:
+            try:
+                selection = int(input())
+                if selection < 1 or selection > 2:
+                    raise ValueError
+                break
+            except ValueError:
+                print("Invalid selection, try again.")
+        if selection == 1:
+            filename = "charactersheet_"+character.pathname+".csv"
+            os.remove(filename)
+            launcher()
+        if selection == 2:
+            characteroptions(character)
+    if selection == 6:
+        launcher(character)
 
+
+# This is the main program, where users select a dice roll to make, can view their character's sheet, and can go into the character options menu        
+def program(character):
+    print("-"*110)
+    print("| {} |".format(character.name).center(110, "|"))
+    print("-"*110)
+    stats = character.stats
+    rolltypes = list(character.stats.keys())
+    rolloptions = ["(1): Custom roll"]
+    for index, item in enumerate(rolltypes):
+        rolloptions.append("({}): Roll for {}".format(index+2, item.lower()))
+    rolloptions.append("({}): Character sheet".format(len(rolltypes)+2))
+    rolloptions.append("({}): Character options".format(len(rolltypes)+3))
+    rolloptions.append("({}): Switch character".format(len(rolltypes)+4))
+    formattedoptions = columns(rolloptions, False)
+    columns(formattedoptions)
+    print("Select an option")
+    while True:
+        try:
+            selection = int(input())
+            if selection < 1 or selection > len(rolloptions):
+                raise ValueError
+            break
+        except ValueError:
+            print("Invalid selection, try again.")
+    if selection == 1:
+        roll()
+    if selection <= len(rolltypes)+1 and selection != 1:
+        selectedroll = rolltypes[selection-2]
+        modifier = stats[selectedroll]
+        roll(1, 20, modifier)
+    if selection == len(rolltypes)+2:
+        character.charactersheet()
+        input()
+    if selection == len(rolltypes)+3:
+        characteroptions(character)
+    if selection == len(rolltypes)+4:
+        launcher()
+                
+def launcher(activecharacter=None):
+    while True:
+        try:
+            if activecharacter is None:
+                print("Welcome to Kate's Py&D. Press ctrl+c at any time to quit the program.")
+                activecharacter = startup()
+            program(activecharacter)
+        except KeyboardInterrupt:
+            quit()
+
+launcher()
