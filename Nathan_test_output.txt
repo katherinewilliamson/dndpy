@@ -1,0 +1,343 @@
+PS C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy> python theprogram.py
+Welcome to Kate's Py&D. Press ctrl+c at any time to quit the program.
+What is the name of your character? 
+Fem
+Character level:
+4
+(1): Mountain dwarf           (2): Dragonborn               (3): Half-orc                 (4): Human                    
+(5): Elf                      (6): Halfling                 (7): Forest gnome             (8): Dwarf                    
+(9): Stout halfling           (10): Rock gnome              (11): High elf                (12): Gnome                   
+(13): Tiefling                (14): Hill dwarf              (15): Wood elf                (16): Drow
+(17): Lightfoot halfling
+Select character race:
+2
+(1): Barbarian                (2): Bard                     (3): Cleric                   (4): Druid                    
+(5): Fighter                  (6): Monk                     (7): Paladin                  (8): Ranger
+(9): Rogue                    (10): Sorcerer                (11): Warlock                 (12): Wizard
+Character class:
+1
+(1): Acolyte                  (2): Charlatan                (3): Criminal                 (4): Spy                      
+(5): Entertainer              (6): Gladiator                (7): Folk hero                (8): Guild artisan
+(9): Guild Merchant           (10): Hermit                  (11): Noble                   (12): Knight
+(13): Outlander               (14): Sage                    (15): Sailor                  (16): Pirate
+(17): Soldier                 (18): Urchin
+Character background:
+13
+Enter raw strength score.
+18
+Enter raw dexterity score.
+14
+Enter raw constitution score.
+14
+Enter raw intelligence score.
+8
+Enter raw wisdom score.
+8
+Enter raw charisma score.
+8
+(1): Animal handling          (2): Athletics                
+(3): Intimidation             (4): Nature
+(5): Perception               (6): Survival
+Select a proficiency:
+2
+(1): Animal handling          (2): Athletics                
+(3): Intimidation             (4): Nature
+(5): Perception               (6): Survival
+Select a proficiency:
+2
+You are already proficient, select another option.
+Select a proficiency:
+4
+(1): Strength [20]            (2): Dexterity [14]           
+(3): Constitution [14]        (4): Intelligence [8]
+(5): Wisdom [8]               (6): Charisma [9]
+Choose an ability score to increase by 1 point.
+3
+(1): Strength [20]            (2): Dexterity [14]           
+(3): Constitution [15]        (4): Intelligence [8]
+(5): Wisdom [8]               (6): Charisma [9]
+Choose an ability score to increase by 1 point.
+3
+--------------------------------------------------------------------------------------------------------------
+|||||||||||||||||||||||||||||||||||||||||||||||||||| Fem |||||||||||||||||||||||||||||||||||||||||||||||||||||
+--------------------------------------------------------------------------------------------------------------
+(1): Custom roll              (2): Roll for strength        (3): Roll for dexterity       (4): Roll for constitution
+(5): Roll for wisdom          (6): Roll for charisma        (7): Roll for acrobatics      (8): Roll for animal handling
+(9): Roll for arcana          (10): Roll for athletics      (11): Roll for deception      (12): Roll for history
+(13): Roll for insight        (14): Roll for intimidation   (15): Roll for investigation  (16): Roll for medicine
+(17): Roll for nature         (18): Roll for perception     (19): Roll for performance    (20): Roll for persuasion
+(21): Roll for religion       (22): Roll for sleight of hand(23): Roll for stealth        (24): Roll for survival
+(25): Roll for intelligence   (26): Character sheet         (27): Character options       (28): Switch character
+Select an option
+17
+Result: 20
+...
+--------------------------------------------------------------------------------------------------------------
+|||||||||||||||||||||||||||||||||||||||||||||||||||| Fem |||||||||||||||||||||||||||||||||||||||||||||||||||||
+--------------------------------------------------------------------------------------------------------------
+(1): Custom roll              (2): Roll for strength        (3): Roll for dexterity       (4): Roll for constitution
+(5): Roll for wisdom          (6): Roll for charisma        (7): Roll for acrobatics      (8): Roll for animal handling
+(9): Roll for arcana          (10): Roll for athletics      (11): Roll for deception      (12): Roll for history
+(13): Roll for insight        (14): Roll for intimidation   (15): Roll for investigation  (16): Roll for medicine
+(17): Roll for nature         (18): Roll for perception     (19): Roll for performance    (20): Roll for persuasion
+(21): Roll for religion       (22): Roll for sleight of hand(23): Roll for stealth        (24): Roll for survival
+(25): Roll for intelligence   (26): Character sheet         (27): Character options       (28): Switch character
+Select an option
+1
+Roll me a 
+    ----> D8
+How many dice would you like to roll? Leave blank to roll once.
+2
+Results: [4, 7]
+Total: 11
+...
+--------------------------------------------------------------------------------------------------------------
+ --------------------------------------------------------------------------------------------------------------
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│----------------------------------------------| Saving Throws |-----------------------------------------------│
+│              Strength: [7] | Dexterity: [2] | Constitution: [5] | Wisdom: [-1] | Charisma: [-1]              │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+|                                                 | Skills |                                                   |
+ --------------------------------------------------------------------------------------------------------------
+Acrobatics: [2]               Animal handling: [-1]         Arcana: [-1]                  Athletics: [9]
+Deception: [-1]               History: [-1]                 Insight: [-1]                 Intimidation: [-1]
+Investigation: [-1]           Medicine: [-1]                Nature: [1]                   Perception: [-1]
+Performance: [-1]             Persuasion: [-1]              Religion: [-1]                Sleight of hand: [2]
+Stealth: [2]                  Survival: [1]                 Intelligence: [-1]
+ --------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------          
+|||||||||||||||||||||||||||||||||||||||||||||||||||| Fem |||||||||||||||||||||||||||||||||||||||||||||||||||||          
+--------------------------------------------------------------------------------------------------------------          
+(1): Custom roll              (2): Roll for strength        (3): Roll for dexterity       (4): Roll for constitution    
+(5): Roll for wisdom          (6): Roll for charisma        (7): Roll for acrobatics      (8): Roll for animal handling 
+(9): Roll for arcana          (10): Roll for athletics      (11): Roll for deception      (12): Roll for history        
+(13): Roll for insight        (14): Roll for intimidation   (15): Roll for investigation  (16): Roll for medicine       
+(17): Roll for nature         (18): Roll for perception     (19): Roll for performance    (20): Roll for persuasion     
+(21): Roll for religion       (22): Roll for sleight of hand(23): Roll for stealth        (24): Roll for survival       
+(25): Roll for intelligence   (26): Character sheet         (27): Character options       (28): Switch character        
+Select an option                                                                                                        
+27
+(1): View character sheet     (2): Level up                   
+(3): Reset my luck            (4): Reset character information
+(5): Delete character         (6): Return                     
+2
+Fem is now level 5.
+--------------------------------------------------------------------------------------------------------------
+|||||||||||||||||||||||||||||||||||||||||||||||||||| Fem |||||||||||||||||||||||||||||||||||||||||||||||||||||
+--------------------------------------------------------------------------------------------------------------
+(1): Custom roll              (2): Roll for strength        (3): Roll for dexterity       (4): Roll for constitution
+(5): Roll for wisdom          (6): Roll for charisma        (7): Roll for acrobatics      (8): Roll for animal handling
+(9): Roll for arcana          (10): Roll for athletics      (11): Roll for deception      (12): Roll for history
+(13): Roll for insight        (14): Roll for intimidation   (15): Roll for investigation  (16): Roll for medicine
+(17): Roll for nature         (18): Roll for perception     (19): Roll for performance    (20): Roll for persuasion
+(21): Roll for religion       (22): Roll for sleight of hand(23): Roll for stealth        (24): Roll for survival
+(25): Roll for intelligence   (26): Character sheet         (27): Character options       (28): Switch character
+Select an option
+28
+Welcome to Kate's Py&D. Press ctrl+c at any time to quit the program.
+Select from existing character sheets or enter 0 to create a new character.
+(0): Create new character
+(1): Fem
+0
+What is the name of your character? 
+Shart
+Character level:
+1
+(1): Mountain dwarf           (2): Dragonborn               (3): Half-orc                 (4): Human                    
+(5): Elf                      (6): Halfling                 (7): Forest gnome             (8): Dwarf
+(9): Stout halfling           (10): Rock gnome              (11): High elf                (12): Gnome
+(13): Tiefling                (14): Hill dwarf              (15): Wood elf                (16): Drow
+(17): Lightfoot halfling
+Select character race:
+5
+(1): Barbarian                (2): Bard                     (3): Cleric                   (4): Druid                    
+(5): Fighter                  (6): Monk                     (7): Paladin                  (8): Ranger
+(9): Rogue                    (10): Sorcerer                (11): Warlock                 (12): Wizard
+Character class:
+3
+(1): Acolyte                  (2): Charlatan                (3): Criminal                 (4): Spy                      
+(5): Entertainer              (6): Gladiator                (7): Folk hero                (8): Guild artisan
+(9): Guild Merchant           (10): Hermit                  (11): Noble                   (12): Knight
+(13): Outlander               (14): Sage                    (15): Sailor                  (16): Pirate
+(17): Soldier                 (18): Urchin
+Character background:
+1
+Enter raw strength score.
+12
+Enter raw dexterity score.
+12
+Enter raw constitution score.
+14
+Enter raw intelligence score.
+8
+Enter raw wisdom score.
+17
+Enter raw charisma score.
+14
+(1): History                  (2): Insight                  
+(3): Medicine                 (4): Persuasion
+(5): Religion
+Select a proficiency:
+5
+(1): History                  (2): Insight                  
+(3): Medicine                 (4): Persuasion
+(5): Religion
+Select a proficiency:
+2
+--------------------------------------------------------------------------------------------------------------
+||||||||||||||||||||||||||||||||||||||||||||||||||| Shart ||||||||||||||||||||||||||||||||||||||||||||||||||||
+--------------------------------------------------------------------------------------------------------------
+(1): Custom roll              (2): Roll for strength        (3): Roll for dexterity       (4): Roll for constitution
+(5): Roll for wisdom          (6): Roll for charisma        (7): Roll for acrobatics      (8): Roll for animal handling
+(9): Roll for arcana          (10): Roll for athletics      (11): Roll for deception      (12): Roll for history
+(13): Roll for insight        (14): Roll for intimidation   (15): Roll for investigation  (16): Roll for medicine
+(17): Roll for nature         (18): Roll for perception     (19): Roll for performance    (20): Roll for persuasion
+(21): Roll for religion       (22): Roll for sleight of hand(23): Roll for stealth        (24): Roll for survival
+(25): Roll for intelligence   (26): Character sheet         (27): Character options       (28): Switch character
+Select an option
+27
+(1): View character sheet     (2): Level up                 
+(3): Reset my luck            (4): Reset character information
+(5): Delete character         (6): Return
+2
+Shart is now level 2.
+--------------------------------------------------------------------------------------------------------------
+||||||||||||||||||||||||||||||||||||||||||||||||||| Shart ||||||||||||||||||||||||||||||||||||||||||||||||||||
+--------------------------------------------------------------------------------------------------------------
+(1): Custom roll              (2): Roll for strength        (3): Roll for dexterity       (4): Roll for constitution
+(5): Roll for wisdom          (6): Roll for charisma        (7): Roll for acrobatics      (8): Roll for animal handling
+(9): Roll for arcana          (10): Roll for athletics      (11): Roll for deception      (12): Roll for history
+(13): Roll for insight        (14): Roll for intimidation   (15): Roll for investigation  (16): Roll for medicine
+(17): Roll for nature         (18): Roll for perception     (19): Roll for performance    (20): Roll for persuasion
+(21): Roll for religion       (22): Roll for sleight of hand(23): Roll for stealth        (24): Roll for survival
+(25): Roll for intelligence   (26): Character sheet         (27): Character options       (28): Switch character
+Select an option
+27
+(1): View character sheet     (2): Level up                 
+(3): Reset my luck            (4): Reset character information
+(5): Delete character         (6): Return
+2
+Shart is now level 3.
+--------------------------------------------------------------------------------------------------------------
+||||||||||||||||||||||||||||||||||||||||||||||||||| Shart ||||||||||||||||||||||||||||||||||||||||||||||||||||
+--------------------------------------------------------------------------------------------------------------
+(1): Custom roll              (2): Roll for strength        (3): Roll for dexterity       (4): Roll for constitution
+(5): Roll for wisdom          (6): Roll for charisma        (7): Roll for acrobatics      (8): Roll for animal handling
+(9): Roll for arcana          (10): Roll for athletics      (11): Roll for deception      (12): Roll for history
+(13): Roll for insight        (14): Roll for intimidation   (15): Roll for investigation  (16): Roll for medicine
+(17): Roll for nature         (18): Roll for perception     (19): Roll for performance    (20): Roll for persuasion
+(21): Roll for religion       (22): Roll for sleight of hand(23): Roll for stealth        (24): Roll for survival
+(25): Roll for intelligence   (26): Character sheet         (27): Character options       (28): Switch character
+Select an option
+27
+(1): View character sheet     (2): Level up                 
+(3): Reset my luck            (4): Reset character information
+(5): Delete character         (6): Return
+2
+(1): Strength [12]            (2): Dexterity [14]           
+(3): Constitution [14]        (4): Intelligence [8]
+(5): Wisdom [17]              (6): Charisma [14]
+Choose an ability score to increase by 1 point.
+5
+(1): Strength [12]            (2): Dexterity [14]           
+(3): Constitution [14]        (4): Intelligence [8]
+(5): Wisdom [18]              (6): Charisma [14]
+Choose an ability score to increase by 1 point.
+5
+Shart is now level 4.
+--------------------------------------------------------------------------------------------------------------
+||||||||||||||||||||||||||||||||||||||||||||||||||| Shart ||||||||||||||||||||||||||||||||||||||||||||||||||||
+--------------------------------------------------------------------------------------------------------------
+(1): Custom roll              (2): Roll for strength        (3): Roll for dexterity       (4): Roll for constitution
+(5): Roll for wisdom          (6): Roll for charisma        (7): Roll for acrobatics      (8): Roll for animal handling
+(9): Roll for arcana          (10): Roll for athletics      (11): Roll for deception      (12): Roll for history
+(13): Roll for insight        (14): Roll for intimidation   (15): Roll for investigation  (16): Roll for medicine
+(17): Roll for nature         (18): Roll for perception     (19): Roll for performance    (20): Roll for persuasion
+(21): Roll for religion       (22): Roll for sleight of hand(23): Roll for stealth        (24): Roll for survival
+(25): Roll for intelligence   (26): Character sheet         (27): Character options       (28): Switch character
+Select an option
+27
+(1): View character sheet     (2): Level up                 
+(3): Reset my luck            (4): Reset character information
+(5): Delete character         (6): Return
+2
+Shart is now level 5.
+--------------------------------------------------------------------------------------------------------------
+||||||||||||||||||||||||||||||||||||||||||||||||||| Shart ||||||||||||||||||||||||||||||||||||||||||||||||||||
+--------------------------------------------------------------------------------------------------------------
+(1): Custom roll              (2): Roll for strength        (3): Roll for dexterity       (4): Roll for constitution
+(5): Roll for wisdom          (6): Roll for charisma        (7): Roll for acrobatics      (8): Roll for animal handling
+(9): Roll for arcana          (10): Roll for athletics      (11): Roll for deception      (12): Roll for history
+(13): Roll for insight        (14): Roll for intimidation   (15): Roll for investigation  (16): Roll for medicine
+(17): Roll for nature         (18): Roll for perception     (19): Roll for performance    (20): Roll for persuasion
+(21): Roll for religion       (22): Roll for sleight of hand(23): Roll for stealth        (24): Roll for survival
+(25): Roll for intelligence   (26): Character sheet         (27): Character options       (28): Switch character
+Select an option
+27
+(1): View character sheet     (2): Level up                 
+(3): Reset my luck            (4): Reset character information
+(5): Delete character         (6): Return
+1
+ --------------------------------------------------------------------------------------------------------------
+ ||||||||||||||||||||||||||||||||||||||||||||||||||| Shart |||||||||||||||||||||||||||||||||||||||||||||||||||
+ --------------------------------------------------------------------------------------------------------------
+                                     | Level 5 | Elf | Cleric | Acolyte |
+ --------------------------------------------------------------------------------------------------------------
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│----------------------------------------------| Saving Throws |-----------------------------------------------│
+│               Strength: [1] | Dexterity: [2] | Constitution: [2] | Wisdom: [7] | Charisma: [5]               │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+|                                                 | Skills |                                                   |
+ --------------------------------------------------------------------------------------------------------------
+Acrobatics: [2]               Animal handling: [4]          Arcana: [-1]                  Athletics: [7]
+Deception: [2]                History: [-1]                 Insight: [10]                 Intimidation: [2]
+Investigation: [-1]           Medicine: [4]                 Nature: [2]                   Perception: [4]
+Performance: [2]              Persuasion: [2]               Religion: [5]                 Sleight of hand: [2]
+Stealth: [2]                  Survival: [7]                 Intelligence: [-1]
+ --------------------------------------------------------------------------------------------------------------
+
+(1): View character sheet     (2): Level up                 
+(3): Reset my luck            (4): Reset character information
+(5): Delete character         (6): Return
+6
+--------------------------------------------------------------------------------------------------------------
+||||||||||||||||||||||||||||||||||||||||||||||||||| Shart ||||||||||||||||||||||||||||||||||||||||||||||||||||
+--------------------------------------------------------------------------------------------------------------
+(1): Custom roll              (2): Roll for strength        (3): Roll for dexterity       (4): Roll for constitution
+(5): Roll for wisdom          (6): Roll for charisma        (7): Roll for acrobatics      (8): Roll for animal handling
+(9): Roll for arcana          (10): Roll for athletics      (11): Roll for deception      (12): Roll for history
+(13): Roll for insight        (14): Roll for intimidation   (15): Roll for investigation  (16): Roll for medicine
+(17): Roll for nature         (18): Roll for perception     (19): Roll for performance    (20): Roll for persuasion
+(21): Roll for religion       (22): Roll for sleight of hand(23): Roll for stealth        (24): Roll for survival
+(25): Roll for intelligence   (26): Character sheet         (27): Character options       (28): Switch character
+Select an option
+28
+Welcome to Kate's Py&D. Press ctrl+c at any time to quit the program.
+Select from existing character sheets or enter 0 to create a new character.
+(0): Create new character
+(1): Fem                      (2): Shart
+Traceback (most recent call last):
+  File "C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy\theprogram.py", line 757, in <module>
+    launcher()
+  File "C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy\theprogram.py", line 753, in launcher
+    program(activecharacter)
+  File "C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy\theprogram.py", line 745, in program
+    launcher()
+  File "C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy\theprogram.py", line 753, in launcher
+    program(activecharacter)
+  File "C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy\theprogram.py", line 743, in program
+    characteroptions(character)
+  File "C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy\theprogram.py", line 666, in characteroptions
+    characteroptions(character)
+  File "C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy\theprogram.py", line 706, in characteroptions
+    launcher(character)
+  File "C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy\theprogram.py", line 753, in launcher
+    program(activecharacter)
+  File "C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy\theprogram.py", line 745, in program
+    launcher()
+  File "C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy\theprogram.py", line 752, in launcher
+    activecharacter = startup()
+  File "C:\Users\crazy\OneDrive\Documents\Coding\Java\dndpy\theprogram.py", line 610, in startup
+    selection = int(input())
+EOFError
